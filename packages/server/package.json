@@ -21,6 +21,7 @@
     "dotenv": "^10.0.0",
     "fastify": "^3.17.0",
     "fastify-compress": "^3.5.0",
+    "fastify-plugin": "^3.0.0",
     "fastify-swagger": "^4.7.0",
     "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
