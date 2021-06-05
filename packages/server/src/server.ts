@@ -2,6 +2,7 @@ import fastify, { FastifyInstance } from 'fastify'
 import fastifyCompress from 'fastify-compress'
 import fastifySwagger from 'fastify-swagger'
 import options from './lib/swagger'
+import rootRoute from './router'
 
 export class Server {
   private _server: FastifyInstance
@@ -11,6 +12,7 @@ export class Server {
 
     this._server.register(fastifyCompress)
     this._server.register(fastifySwagger, options)
+    this._server.register(rootRoute, { prefix: '/' })
 
     this._server.ready(() => {
       this._server.swagger()
