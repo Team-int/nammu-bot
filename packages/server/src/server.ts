@@ -12,10 +12,6 @@ export class Server {
     this._server.register(fastifyCompress)
     this._server.register(swaggerPlugin)
     this._server.register(rootRoute, { prefix: '/' })
-
-    this._server.ready(() => {
-      this._server.swagger()
-    })
   }
 
   public listen(port?: number) {
