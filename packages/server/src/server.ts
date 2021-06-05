@@ -26,6 +26,6 @@ export class Server {
   }
 
   get server() {
-    return this.server
+    return this._server
   }
 }
