@@ -1,7 +1,7 @@
 import { FastifyPluginCallback, RouteShorthandOptions } from 'fastify'
 import { URLSearchParams } from 'url'
-import axios from 'axios'
 import { User } from '@src/entities/User'
+import daxios from '@src/lib/client/discord'
 
 interface ResponseType {
   access_token: string
@@ -27,18 +27,24 @@ const callbackRoute: FastifyPluginCallback = (fastify, opts, done) => {
       params.append('code', code)
       params.append('redirect_uri', DISCORD_REDIRECT_URL!)
 
-      const response = await axios({
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        data: params,
-        url: 'https://discord.com/api/v8/oauth2/token',
+      const response = await daxios.request('POST', {
+        url: '/v8/oauth2/token',
+        options: {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+        payload: params,
       })
 
       const data = response.data as ResponseType
 
-      const meResponse = await axios.get('https://discord.com/api/users/@me', {
-        headers: {
-          Authorization: `Bearer ${data.access_token}`,
+      const meResponse = await daxios.request('GET', {
+        url: '/users/@me',
+        options: {
+          headers: {
+            Authorization: `Bearer ${data.access_token}`,
+          },
         },
       })
 

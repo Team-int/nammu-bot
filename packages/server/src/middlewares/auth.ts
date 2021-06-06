@@ -1,8 +1,8 @@
 import { FastifyPluginCallback } from 'fastify'
 import fp from 'fastify-plugin'
-import axios from 'axios'
 import { URLSearchParams } from 'url'
 import { User } from '@src/entities/User'
+import daxios from '@src/lib/client/discord'
 
 interface ResponseType {
   access_token: string
@@ -29,22 +29,25 @@ const authMiddleware: FastifyPluginCallback = (fastify, opts, done) => {
     let token = access_token
 
     try {
-      await axios.get('https://discord.com/api/users/@me', {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
+      await daxios.request('GET', {
+        url: '/users/@me',
+        options: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       })
     } catch (err) {
       try {
-        const response = await axios.post(
-          'https://discord.com/api/v8/oauth2/token',
-          params,
-          {
+        const response = await daxios.request('POST', {
+          url: '/v8/oauth2/token',
+          options: {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
-          }
-        )
+          },
+          payload: params,
+        })
 
         const data = response.data as ResponseType
 
@@ -63,9 +66,12 @@ const authMiddleware: FastifyPluginCallback = (fastify, opts, done) => {
       }
     }
 
-    const response = await axios.get('https://discord.com/api/users/@me', {
-      headers: {
-        Authorization: `Bearer ${token}`,
+    const response = await daxios.request('GET', {
+      url: '/users/@me',
+      options: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       },
     })
 
