@@ -1,5 +1,6 @@
 import 'pg'
 import { createConnection, ConnectionOptions } from 'typeorm'
+import entities from './entities'
 
 export class Database {
   private connectionOptions: ConnectionOptions
@@ -10,6 +11,7 @@ export class Database {
 
   private initialOptions() {
     this.connectionOptions = {
+      entities,
       type: process.env.TYPEORM_TYPE as any,
       host: process.env.TYPEORM_HOST,
       database: process.env.TYPEORM_DATABASE,
