@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "lib": ["DOM", "ES2020", "ESNext.AsyncIterable"],
+    "module": "commonjs",
+    "moduleResolution": "Node",
+    "outDir": "./build",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types", "@types"],
+    "paths": {
+      "@src/*": ["src/*"],
+      "@entity/*": ["src/entities/*"],
+      "@lib/*": ["src/lib/*"]
+    }
+  }
+}
