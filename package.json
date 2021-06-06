@@ -8,6 +8,7 @@
     "packages/**/*"
   ],
   "scripts": {
-    "bot": "yarn workspace bot"
+    "bot": "yarn workspace bot",
+    "server": "yarn workspace server"
   }
 }
