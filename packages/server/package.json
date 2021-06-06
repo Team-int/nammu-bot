@@ -7,6 +7,7 @@
     "start:dev": "NODE_ENV=development ts-node-dev --respawn src/index.ts | pino-pretty"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/node": "^15.12.0",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
@@ -18,6 +19,7 @@
     "typescript": "^4.3.2"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "dotenv": "^10.0.0",
     "fastify": "^3.17.0",
     "fastify-compress": "^3.5.0",
