@@ -1,10 +1,6 @@
 import React from 'react';
-import Navbar from '../components/Navbar';
+import MainComponent from '../components/Main';
 
 export default function Main() {
-  return (
-    <div>
-      <Navbar />
-    </div>
-  );
+  return <MainComponent />;
 }
