@@ -11,9 +11,9 @@ export default function Navbar() {
           <Icon name="BrandIcon" />
         </div>
         <div id="navbar__contents">
-          <NavbarLink content="About" to=""></NavbarLink>
-          <NavbarLink content="Commands" to=""></NavbarLink>
-          <NavbarLink content="Invite" to=""></NavbarLink>
+          <NavbarLink content="About" to="/about"></NavbarLink>
+          <NavbarLink content="Commands" to="/commands"></NavbarLink>
+          <NavbarLink content="Invite" to="/invite"></NavbarLink>
           <button>대시보드</button>
         </div>
       </div>
@@ -24,6 +24,7 @@ export default function Navbar() {
 const navbarStyleCSS = css`
   max-width: 1440px;
   margin: 0 auto;
+  position: sticky;
   & > div {
     display: flex;
     justify-content: space-between;
