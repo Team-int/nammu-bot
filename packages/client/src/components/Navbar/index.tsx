@@ -22,9 +22,13 @@ export default function Navbar() {
 }
 
 const navbarStyleCSS = css`
-  max-width: 1440px;
-  margin: 0 auto;
+  position: -webkit-sticky;
   position: sticky;
+  max-width: 1440px;
+  background: #121212;
+  top: 0px;
+  margin: 0 auto;
+  z-index: 2;
   & > div {
     display: flex;
     justify-content: space-between;
