@@ -12,7 +12,7 @@ class DiscordAxios {
   private axios: AxiosInstance
 
   constructor() {
-    this.axios = axios.create({ baseURL: 'http://discord.com/api' })
+    this.axios = axios.create({ baseURL: 'https://discord.com/api' })
   }
 
   request(type: RequestType, options: RequestParamType) {
