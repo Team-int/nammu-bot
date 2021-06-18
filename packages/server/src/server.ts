@@ -1,9 +1,9 @@
 import fastify, { FastifyInstance } from 'fastify'
 import fastifyCompress from 'fastify-compress'
 import fastifyCookie from 'fastify-cookie'
+import fastifyCors from 'fastify-cors'
 import swaggerPlugin from './plugins/swagger'
 import rootRoute from './router'
-import authMiddleware from './middlewares/auth'
 export class Server {
   private _server: FastifyInstance
 
@@ -12,6 +12,7 @@ export class Server {
 
     const { COOKIE_SECRET } = process.env
 
+    this._server.register(fastifyCors)
     this._server.register(fastifyCompress)
     this._server.register(fastifyCookie, {
       secret: COOKIE_SECRET,
