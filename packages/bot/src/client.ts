@@ -22,6 +22,7 @@ class BotClient {
 
   constructor() {
     this.client = new Client()
+    this.prefix = process.env.PREFIX || '##'
 
     this.handleCommand()
     this.handleEvent()
@@ -81,6 +82,7 @@ class BotClient {
 
     if (!this.commands.has(command)) {
       // TODO: help command
+      console.log(2)
       return
     }
 
