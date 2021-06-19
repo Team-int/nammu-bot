@@ -2,6 +2,7 @@ import React from 'react';
 import { css } from '@emotion/react';
 import Icon from '../../static/icons';
 import NavbarLink from './NavbarLink';
+import DashboardButton from './DashboardButton';
 
 export default function Navbar() {
   return (
@@ -14,7 +15,7 @@ export default function Navbar() {
           <NavbarLink content="About" to="/about"></NavbarLink>
           <NavbarLink content="Commands" to="/commands"></NavbarLink>
           <NavbarLink content="Invite" to="/invite"></NavbarLink>
-          <button>대시보드</button>
+          <DashboardButton />
         </div>
       </div>
     </div>
@@ -38,15 +39,6 @@ const navbarStyleCSS = css`
       display: flex;
       flex-direction: row;
       align-items: center;
-      button {
-        padding: 14px 39px;
-        background: white;
-        border-radius: 25px;
-        font-weight: bold;
-        outline: none;
-        border: none;
-        margin-left: 25px;
-      }
     }
   }
 `;
