@@ -39,14 +39,21 @@ const callbackRoute: FastifyPluginCallback = (fastify, opts, done) => {
 
       const data = response.data as ResponseType
 
-      const meResponse = await daxios.request('GET', {
-        url: '/users/@me',
-        options: {
-          headers: {
-            Authorization: `Bearer ${data.access_token}`,
+      let meResponse: any
+
+      try {
+        meResponse = await daxios.request('GET', {
+          url: '/users/@me',
+          options: {
+            headers: {
+              Authorization: `Bearer ${data.access_token}`,
+            },
           },
-        },
-      })
+        })
+      } catch (err) {
+        fastify.log.info(err.response.data)
+        return res.status(500)
+      }
 
       const user = await User.findOne(meResponse.data.id)
 
@@ -57,13 +64,14 @@ const callbackRoute: FastifyPluginCallback = (fastify, opts, done) => {
       }
 
       res.setCookie('refresh_token', data.refresh_token, {
-        maxAge: data.expires_in,
         path: '/',
       })
 
       res.setCookie('access_token', data.access_token, {
         path: '/',
       })
+
+      res.redirect(`${process.env.CLIENT_URL}/auth/login`)
 
       return data
     }
