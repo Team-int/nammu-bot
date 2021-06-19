@@ -82,7 +82,6 @@ class BotClient {
 
     if (!this.commands.has(command)) {
       // TODO: help command
-      console.log(2)
       return
     }
 
