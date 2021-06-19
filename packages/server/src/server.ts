@@ -12,7 +12,7 @@ export class Server {
 
     const { COOKIE_SECRET } = process.env
 
-    this._server.register(fastifyCors)
+    this._server.register(fastifyCors, { origin: true, credentials: true })
     this._server.register(fastifyCompress)
     this._server.register(fastifyCookie, {
       secret: COOKIE_SECRET,
