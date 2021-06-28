@@ -1,47 +1,45 @@
-import { Guild } from '@src/entities/Guild'
+import guildChecker from '@src/middlewares/guildChecker'
 import { FastifyPluginCallback } from 'fastify'
 
-type modifyType = 'guildDelete'
-
-interface ServiceType {
-  StatusCode: number
-  message?: string
-  guild?: any
-}
-
 const guildModifyRoute: FastifyPluginCallback = (fastify, opts, done) => {
-  fastify.patch<{ Querystring: { type: modifyType }; Params: { id: string } }>(
-    '/:id',
+  fastify.register(guildChecker)
+  fastify.patch('/leave', async (req, res) => {
+    if (!req.guild) return res.status(404).send({ message: 'Guild not found' })
+
+    const guild = req.guild
+
+    guild.joined = false
+
+    await guild.save()
+
+    return res.status(204).send()
+  })
+
+  fastify.patch<{ Querystring: { name: string } }>(
+    '/change-name',
     async (req, res) => {
-      const id = req.params['id']
-      const type = req.query['type']
+      if (!req.guild)
+        return res.status(404).send({ message: 'Guild not found' })
 
-      switch (type) {
-        case 'guildDelete':
-          const response = await guildDelete(id)
+      const name = decodeURIComponent(req.query['name'])
 
-          res
-            .status(response.StatusCode)
-            .send({ message: response.message, guild: response.guild })
-        default:
-          return res.status(400).send({ message: 'Invalid type' })
-      }
+      fastify.log.info({ guild: req.guild })
+      fastify.log.info({ headers: req.headers })
+
+      if (!name)
+        return res.status(400).send({ message: 'Name parameter not found' })
+
+      const guild = req.guild
+
+      guild.name = name
+
+      await guild.save()
+
+      return res.status(204).send()
     }
   )
 
   done()
-}
-
-const guildDelete = async (id: string): Promise<ServiceType> => {
-  const guild = await Guild.findOne(id)
-
-  if (!guild) return { StatusCode: 403, message: 'Guild not found' }
-
-  guild.joined = false
-
-  await guild.save()
-
-  return { StatusCode: 200, guild }
 }
 
 export default guildModifyRoute
