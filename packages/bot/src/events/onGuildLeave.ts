@@ -7,7 +7,15 @@ export default class onGuildLeave {
   @Execute
   public execute(guild: Guild) {
     try {
-      client.patch(`/api/v1/guild/${guild.id}?type=guildDelete`, {}, {})
+      client.patch(
+        `/api/v1/guild/leave`,
+        {},
+        {
+          headers: {
+            guild_id: guild,
+          },
+        }
+      )
     } catch (e) {}
   }
 }
