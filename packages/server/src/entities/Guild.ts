@@ -3,9 +3,12 @@ import {
   Column,
   Entity,
   Index,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryColumn,
 } from 'typeorm'
+import { GuildMetadata } from './GuildMetadata'
 
 @Entity('guilds')
 export class Guild extends BaseEntity {
@@ -21,4 +24,7 @@ export class Guild extends BaseEntity {
   @Index()
   @Column({ type: 'varchar', nullable: false })
   name: string
+
+  @OneToOne(() => GuildMetadata, (meta) => meta.guild)
+  metadata: GuildMetadata
 }
