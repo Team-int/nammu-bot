@@ -7,11 +7,15 @@ import useOuterClick from '../../../hooks/useOuterClick';
 import useGetUserGuilds from '../../../hooks/useGetUserGuilds';
 import { useEffect } from 'react';
 import useDashboardAtomState from '../../../atom/Dashboard';
+import useLoadingAtomState from '../../../atom/Loading';
+import { useRouter } from 'next/router';
 
 export default function ServerSelect() {
   const [selected] = useSelectedServerAtomState();
   const [, setDashboard] = useDashboardAtomState();
   const [opened, setOpened] = useState(false);
+  const [, setIsLoading] = useLoadingAtomState();
+  const router = useRouter();
 
   const { getUserGuilds } = useGetUserGuilds();
 
@@ -19,6 +23,16 @@ export default function ServerSelect() {
 
   const onArrowClick = async (e: React.MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
+
+    const server = selected.servers.find((v) => v.name === selected.name);
+
+    setDashboard((prev) => ({
+      ...prev,
+      server: {
+        id: server.id,
+        display_name: server.name,
+      },
+    }));
   };
 
   const onContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -32,12 +46,19 @@ export default function ServerSelect() {
     setOpened(false);
   };
 
-  useEffect(() => {
-    setDashboard((prev) => ({ ...prev, loading: true }));
+  const getGuilds = async () => {
+    setIsLoading(true);
 
-    getUserGuilds().then(() => {
-      setDashboard((prev) => ({ ...prev, loading: false }));
-    });
+    await router.push('/loading?redirect=/servers');
+
+    await getUserGuilds();
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (selected.name) return;
+    getGuilds();
   }, []);
 
   useOuterClick(serverListEl, outerSideClickHandler);
