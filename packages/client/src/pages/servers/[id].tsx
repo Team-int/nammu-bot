@@ -16,6 +16,19 @@ export default function ServerDashboard() {
     if (dashboard.server?.id !== server_id) router.push('/');
   }, []);
 
+  useEffect(() => {
+    const areYouSure = (e: any) => {
+      if (!dashboard.saved)
+        e.returnValue = '변경사항이 저장되지 않을 수 있습니다';
+    };
+
+    window.addEventListener('beforeunload', areYouSure);
+
+    return () => {
+      window.removeEventListener('beforeunload', areYouSure);
+    };
+  });
+
   return (
     <>
       <Head>
