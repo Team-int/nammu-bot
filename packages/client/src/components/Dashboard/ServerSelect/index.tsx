@@ -33,6 +33,8 @@ export default function ServerSelect() {
         display_name: server.name,
       },
     }));
+
+    router.push(`/servers/${server.id}`);
   };
 
   const onContentClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -72,7 +74,7 @@ export default function ServerSelect() {
         <h1>서버선택</h1>
         <div id="selector">
           <div onClick={onContentClick}>
-            <h1>{selected.name}</h1>
+            <h1>{selected.name || '로딩중...'}</h1>
           </div>
           <div onClick={onArrowClick}>
             <Icon name="CompleteArrowRight" />
