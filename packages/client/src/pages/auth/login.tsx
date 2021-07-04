@@ -28,7 +28,7 @@ export default function Login() {
 
   useEffect(() => {
     auth().then(() => {
-      history.push('/dashboard');
+      history.push('/loading?redirect=/dashboard');
     });
   }, []);
 
