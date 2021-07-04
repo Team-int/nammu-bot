@@ -6,14 +6,12 @@ export interface Dashboard {
     display_name: string;
   };
   saved: boolean;
-  loading: boolean;
 }
 
 export const dashboardAtom = atom<Dashboard>({
   key: 'dashboard',
   default: {
     saved: false,
-    loading: false,
   },
 });
 
