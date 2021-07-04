@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { css, keyframes } from '@emotion/react';
 import Icon from '../../static/icons';
 import generateMessage from '../../lib/loadingMessages';
+import { useMemo } from 'react';
 
 export default function Loading() {
-  const [message, setMessage] = useState('');
+  const message = useMemo(() => generateMessage(), []);
 
   useEffect(() => {
-    setMessage(generateMessage());
+    console.log('Loading component rendered');
   }, []);
 
   return (
