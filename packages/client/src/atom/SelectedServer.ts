@@ -10,6 +10,7 @@ export interface Server {
 export interface SelectedServer {
   name?: string;
   servers?: Server[];
+  loaded: boolean;
 }
 
 export const selectedServerAtom = atom<SelectedServer>({
@@ -17,6 +18,7 @@ export const selectedServerAtom = atom<SelectedServer>({
   default: {
     name: '',
     servers: [],
+    loaded: false,
   },
 });
 
