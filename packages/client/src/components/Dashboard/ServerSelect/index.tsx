@@ -9,12 +9,15 @@ import { useEffect } from 'react';
 import useDashboardAtomState from '../../../atom/Dashboard';
 import useLoadingAtomState from '../../../atom/Loading';
 import { useRouter } from 'next/router';
+import ServerNotFound from './ServerNotFound';
+import { useMemo } from 'react';
 
 export default function ServerSelect() {
-  const [selected] = useSelectedServerAtomState();
+  const [selected, setSelected] = useSelectedServerAtomState();
   const [, setDashboard] = useDashboardAtomState();
-  const [opened, setOpened] = useState(false);
   const [, setIsLoading] = useLoadingAtomState();
+  const [opened, setOpened] = useState(false);
+  const isLoaded = useMemo(() => selected.loaded, [selected]);
   const router = useRouter();
 
   const { getUserGuilds } = useGetUserGuilds();
@@ -56,38 +59,44 @@ export default function ServerSelect() {
     await getUserGuilds();
 
     setIsLoading(false);
+    setSelected((prev) => ({ ...prev, loaded: true }));
   };
 
   useEffect(() => {
-    if (selected.name) return;
+    if (!isLoaded && selected.name) return;
+    if (isLoaded) return;
     getGuilds();
   }, []);
 
   useOuterClick(serverListEl, outerSideClickHandler);
 
+  if (isLoaded && selected.servers.length === 0) return <ServerNotFound />;
+
   return (
-    <div css={ServerSelectStyleCSS(opened)}>
-      <div id="icon">
-        <Icon name="BrandIcon" />
-      </div>
-      <div id="content">
-        <h1>서버선택</h1>
-        <div id="selector">
-          <div onClick={onContentClick}>
-            <h1>{selected.name || '로딩중...'}</h1>
+    <>
+      <div css={ServerSelectStyleCSS(opened)}>
+        <div id="icon">
+          <Icon name="BrandIcon" />
+        </div>
+        <div id="content">
+          <h1>서버선택</h1>
+          <div id="selector">
+            <div onClick={onContentClick}>
+              <h1>{selected.name || '로딩중...'}</h1>
+            </div>
+            <div onClick={onArrowClick}>
+              <Icon name="CompleteArrowRight" />
+            </div>
           </div>
-          <div onClick={onArrowClick}>
-            <Icon name="CompleteArrowRight" />
+          <div id="server_list" ref={serverListEl}>
+            <div>{opened && <ServerList />}</div>
+          </div>
+          <div id="message">
+            <p>관리할 서버를 선택해주세요</p>
           </div>
         </div>
-        <div id="server_list" ref={serverListEl}>
-          <div>{opened && <ServerList />}</div>
-        </div>
-        <div id="message">
-          <p>관리할 서버를 선택해주세요</p>
-        </div>
       </div>
-    </div>
+    </>
   );
 }
 
