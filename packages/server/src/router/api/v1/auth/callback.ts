@@ -63,13 +63,9 @@ const callbackRoute: FastifyPluginCallback = (fastify, opts, done) => {
         await User.create(data).save()
       }
 
-      res.setCookie('refresh_token', data.refresh_token, {
-        path: '/',
-      })
+      req.session.set('refresh_token', data.refresh_token)
 
-      res.setCookie('access_token', data.access_token, {
-        path: '/',
-      })
+      req.session.set('access_token', data.access_token)
 
       res.redirect(`${process.env.CLIENT_URL}/auth/login`)
 

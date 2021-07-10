@@ -5,7 +5,7 @@ import { FastifyPluginCallback } from 'fastify'
 const meRoute: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.register(auth, {})
   fastify.get('/', async (req, res) => {
-    const token = req.cookies['access_token']
+    const token = req.session.get('access_token')
 
     const response = await daxios.request('GET', {
       url: '/users/@me',

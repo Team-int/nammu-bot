@@ -14,7 +14,8 @@ interface ResponseType {
 
 const authMiddleware: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.addHook('preHandler', async (req, res) => {
-    const { access_token, refresh_token } = req.cookies
+    const access_token = req.session.get('access_token')
+    const refresh_token = req.session.get('refresh_token')
 
     if (!access_token || !refresh_token) return
 
@@ -24,7 +25,7 @@ const authMiddleware: FastifyPluginCallback = (fastify, opts, done) => {
     params.append('client_id', DISCORD_APP_ID!)
     params.append('client_secret', DISCORD_APP_SECRET!)
     params.append('grant_type', 'refresh_token')
-    params.append('refresh_token', refresh_token)
+    params.append('refresh_token', refresh_token as string)
 
     let token = access_token
 
@@ -51,16 +52,9 @@ const authMiddleware: FastifyPluginCallback = (fastify, opts, done) => {
 
         const data = response.data as ResponseType
 
-        token = data.access_token
+        req.session.set('refresh_token', data.refresh_token)
 
-        res.setCookie('refresh_token', data.refresh_token, {
-          maxAge: data.expires_in,
-          path: '/',
-        })
-
-        res.setCookie('access_token', data.access_token, {
-          path: '/',
-        })
+        req.session.set('access_token', data.access_token)
       } catch (err) {
         return
       }
