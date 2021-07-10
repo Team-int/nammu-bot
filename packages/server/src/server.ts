@@ -3,10 +3,10 @@ import fastifyCompress from 'fastify-compress'
 import fastifyCookie from 'fastify-cookie'
 import fastifyCors from 'fastify-cors'
 import fastifySession from '@mgcrea/fastify-session'
-import fastifyRedis from 'fastify-redis'
 import swaggerPlugin from './plugins/swagger'
 import rootRoute from './router'
 import { redisClient } from './redis'
+import { RedisStore } from '@mgcrea/fastify-session-redis-store'
 export class Server {
   private _server: FastifyInstance
 
@@ -20,12 +20,12 @@ export class Server {
     this._server.register(fastifyCors, { origin: true, credentials: true })
     this._server.register(fastifyCompress)
     this._server.register(fastifyCookie)
-    this._server.register(fastifyRedis, {
-      client: redisClient,
-    })
     this._server.register(fastifySession, {
       key: SESSION_SECRET,
-      store: this._server.redis,
+      store: new RedisStore({
+        client: redisClient,
+        ttl: 1000 * 60 * 24 * 7,
+      }),
       cookieName: 'qid',
       cookie: {
         maxAge: 1000 * 60 * 24 * 7,
