@@ -61,6 +61,12 @@ const callbackRoute: FastifyPluginCallback = (fastify, opts, done) => {
         const data = meResponse.data as User
 
         await User.create(data).save()
+      } else if (!user.email) {
+        const data = meResponse.data as User
+
+        const uUser = User.create(data)
+
+        await uUser.save()
       }
 
       req.session.set('refresh_token', data.refresh_token)
