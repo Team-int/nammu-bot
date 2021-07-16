@@ -7,9 +7,9 @@ const guildRoute: FastifyPluginCallback = (fastify, opts, done) => {
   fastify.get('/', async (req, res) => {
     if (!req.user) return res.status(401).send({ message: 'User not found' })
 
-    const userID = req.user.id
+    const { user } = req
 
-    const guilds = await Guild.find({ where: { owner_id: userID } })
+    const guilds = await Guild.find({ where: { owner: user } })
 
     return res.status(200).send({ guilds })
   })

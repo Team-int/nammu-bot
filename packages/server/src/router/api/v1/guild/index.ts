@@ -1,4 +1,5 @@
 import { Guild } from '@src/entities/Guild'
+import { User } from '@src/entities/User'
 import { FastifyPluginCallback } from 'fastify'
 import guildModifyRoute from './guildModifyRoute'
 
@@ -19,9 +20,16 @@ const guildRoute: FastifyPluginCallback = (fastify, opts, done) => {
       return isGuildExists
     }
 
+    const owner = await User.findOne(guild.ownerID)
+    let createdOwner: User | null = null
+
+    if (!owner) {
+      createdOwner = await User.create({ id: guild.ownerID }).save()
+    }
+
     const guildEntity = Guild.create(guild)
 
-    guildEntity.owner_id = guild.ownerID
+    guildEntity.owner = (createdOwner || owner) as User // Gurantee createdOwner or owner is User object
 
     await guildEntity.save()
 

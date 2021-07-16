@@ -1,14 +1,20 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   Index,
   JoinColumn,
+  ManyToMany,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryColumn,
+  UpdateDateColumn,
 } from 'typeorm'
 import { GuildMetadata } from './GuildMetadata'
+import { Messages } from './Messages'
+import { User } from './User'
 
 @Entity('guilds')
 export class Guild extends BaseEntity {
@@ -18,8 +24,15 @@ export class Guild extends BaseEntity {
   @Column({ type: 'boolean', default: true })
   joined: boolean
 
-  @Column({ type: 'varchar', nullable: false })
-  owner_id: string
+  @Column({ type: 'uuid' })
+  fk_owner_id: string
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'fk_owner_id' })
+  owner: User
+
+  @ManyToMany(() => User)
+  users: User[]
 
   @Index()
   @Column({ type: 'varchar', nullable: false })
@@ -27,4 +40,13 @@ export class Guild extends BaseEntity {
 
   @OneToOne(() => GuildMetadata, (meta) => meta.guild)
   metadata: GuildMetadata
+
+  @OneToMany(() => Messages, (messages) => messages.guild)
+  messages: Messages[]
+
+  @UpdateDateColumn()
+  updated_at: Date
+
+  @CreateDateColumn()
+  created_at: Date
 }
