@@ -1,17 +1,43 @@
-type ICommandAliases = string[] | string;
+import { Constructable, Message } from 'discord.js'
 
-export type TArguments = string[] | null;
+type ICommandAliases = string[] | string
+
+export type TArguments = string[] | null
 
 export default function Command(command: ICommandAliases) {
   return function <T extends { new (...args: any[]): {} }>(constructFN: T) {
     return class extends constructFN {
       constructor(...args: any[]) {
-        super(args);
+        super(args)
       }
 
-      public command = command;
-    };
-  };
+      public command = command
+    }
+  }
+}
+
+export class CommandController {
+  constructor(public message: Message) {}
+
+  set msg(message: Message) {
+    this.message = message
+  }
+
+  get msg() {
+    return this.message
+  }
+}
+
+export function CommandModule<T extends new (...a: any[]) => any>(
+  Service: T
+): Constructable<any> {
+  return class {
+    public service: typeof Service
+
+    constructor() {
+      this.service = new Service()
+    }
+  }
 }
 
 export function Execute(
@@ -19,8 +45,8 @@ export function Execute(
   _: string,
   descriptor: PropertyDescriptor
 ) {
-  if (target === {}) return;
-  target.execute = descriptor.value;
+  if (target === {}) return
+  target.execute = descriptor.value
 }
 
 /*
