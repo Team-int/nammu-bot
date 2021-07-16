@@ -8,6 +8,18 @@ import {
 } from 'typeorm'
 import { Embeds } from './Embeds'
 
+export interface EmbedData {
+  title?: string
+  color?: string
+  description?: string
+  author?: boolean
+  footer?: string
+  thumbnail?: string
+  url?: string
+  timestamp?: boolean
+  image?: string
+}
+
 @Entity('embed_metadata')
 export class EmbedMetadata extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')

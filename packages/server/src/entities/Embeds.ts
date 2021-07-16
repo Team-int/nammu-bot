@@ -24,6 +24,9 @@ export class Embeds extends BaseEntity {
   @JoinColumn({ name: 'fk_guild_id' })
   guild: Guild
 
+  @Column({ type: 'varchar', length: 10 })
+  name: string
+
   @OneToOne(() => EmbedMetadata, (meta) => meta.embed)
   metadata: EmbedMetadata
 
