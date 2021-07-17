@@ -1,16 +1,15 @@
-import { CommandController } from '@src/lib/commandManager'
+import { autoInjectable } from 'tsyringe'
 import { Message } from 'discord.js'
 import EmbedService from './embed.service'
 
-export default class EmbedController extends CommandController {
-  constructor(message: Message, private readonly service: EmbedService) {
-    super(message)
-  }
+@autoInjectable()
+export default class EmbedController {
+  constructor(private readonly service?: EmbedService) {}
 
-  async init(args: IArguments) {
+  async init(message: Message, args: IArguments) {
     switch (args[0]) {
       case '생성':
-        return await this.service.create(this.message, args[1])
+        return await this.service?.create(message, args[1])
     }
   }
 }

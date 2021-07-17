@@ -7,8 +7,7 @@ import { Message } from 'discord.js'
 export default class Embed {
   @Execute
   public async execute(message: Message, args: IArguments) {
-    const controller = new EmbedController(message, new EmbedService())
-
-    controller.init(args)
+    const controller = new EmbedController()
+    await controller.init(message, args)
   }
 }

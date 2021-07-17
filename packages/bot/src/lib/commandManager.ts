@@ -16,37 +16,13 @@ export default function Command(command: ICommandAliases) {
   }
 }
 
-export class CommandController {
-  constructor(public message: Message) {}
-
-  set msg(message: Message) {
-    this.message = message
-  }
-
-  get msg() {
-    return this.message
-  }
-}
-
-export function CommandModule<T extends new (...a: any[]) => any>(
-  Service: T
-): Constructable<any> {
-  return class {
-    public service: typeof Service
-
-    constructor() {
-      this.service = new Service()
-    }
-  }
-}
-
 export function Execute(
   target: any,
   _: string,
   descriptor: PropertyDescriptor
 ) {
   if (target === {}) return
-  target.execute = descriptor.value
+  target.execute = descriptor.value.bind(target)
 }
 
 /*
