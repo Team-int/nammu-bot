@@ -1,6 +1,5 @@
 import EmbedController from '@src/controllers/embed/embed.controller'
-import EmbedService from '@src/controllers/embed/embed.service'
-import Command, { CommandModule, Execute } from '@src/lib/commandManager'
+import Command, { Execute } from '@src/lib/commandManager'
 import { Message } from 'discord.js'
 
 @Command(['임베드'])
