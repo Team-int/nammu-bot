@@ -4,17 +4,22 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start:dev": "NODE_ENV=development ts-node-dev -r tsconfig-paths/register src/index.ts | pino-pretty"
+    "start:dev": "NODE_ENV=development ts-node-dev -r tsconfig-paths/register src/index.ts | pino-pretty",
+    "test": "NODE_ENV=test ts-node -r tsconfig-paths/register src/setupTests.ts | pino-pretty && jest --detectOpenHandles --forceExit"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/ioredis": "^4.26.5",
+    "@types/jest": "^26.0.24",
     "@types/node": "^15.12.0",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27.0.6",
+    "pino-pretty": "^5.1.1",
     "prettier": "^2.3.0",
+    "ts-jest": "^27.0.3",
     "ts-node": "^10.0.0",
     "ts-node-dev": "^1.1.6",
     "tsconfig-paths": "^3.9.0",
@@ -35,5 +40,22 @@
     "pg": "^8.6.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.34"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testRegex": "\\.test\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "globals": {
+      "ts-jest": {
+        "diagnostics": true
+      }
+    }
   }
 }

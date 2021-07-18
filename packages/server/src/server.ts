@@ -1,4 +1,4 @@
-import fastify, { FastifyInstance } from 'fastify'
+import fastify, { FastifyInstance, FastifyServerOptions } from 'fastify'
 import fastifyCompress from 'fastify-compress'
 import fastifyCookie from 'fastify-cookie'
 import fastifyCors from 'fastify-cors'
@@ -10,8 +10,8 @@ import { RedisStore } from '@mgcrea/fastify-session-redis-store'
 export class Server {
   private _server: FastifyInstance
 
-  constructor() {
-    this._server = fastify({ logger: true })
+  constructor(private opts: FastifyServerOptions = { logger: true }) {
+    this._server = fastify(this.opts)
 
     const { SESSION_SECRET } = process.env
 
