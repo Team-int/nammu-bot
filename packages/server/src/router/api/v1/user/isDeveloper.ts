@@ -2,10 +2,10 @@ import { User } from '@src/entities/User'
 import { FastifyPluginCallback } from 'fastify'
 
 const isDeveloperRoute: FastifyPluginCallback = (fastify, opts, done) => {
-  fastify.get<{ Querystring: { search: string } }>('/id', async (req, res) => {
-    const { search } = req.query
+  fastify.get<{ Querystring: { id: string } }>('/', async (req, res) => {
+    const { id } = req.query
 
-    const user = await User.findOne(search)
+    const user = await User.findOne(id)
 
     return user?.developer
   })
