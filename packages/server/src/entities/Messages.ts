@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer'
 import {
   BaseEntity,
   Column,
@@ -16,6 +17,7 @@ export class Messages extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string
 
+  @Exclude()
   @Column({ type: 'uuid' })
   fk_guild_id: string
 

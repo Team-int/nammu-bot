@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer'
 import {
   BaseEntity,
   Column,
@@ -22,9 +23,11 @@ export interface EmbedData {
 
 @Entity('embed_metadata')
 export class EmbedMetadata extends BaseEntity {
+  @Exclude()
   @PrimaryGeneratedColumn('uuid')
   id: string
 
+  @Exclude()
   @Column({ type: 'uuid' })
   fk_embed_id: string
 

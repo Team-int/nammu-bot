@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer'
 import {
   BaseEntity,
   Column,
@@ -24,6 +25,7 @@ export class Guild extends BaseEntity {
   @Column({ type: 'boolean', default: true })
   joined: boolean
 
+  @Exclude()
   @Column({ type: 'uuid' })
   fk_owner_id: string
 

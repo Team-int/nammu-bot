@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer'
 import {
   BaseEntity,
   Column,
@@ -30,6 +31,7 @@ export class GuildMetadata extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   nitro_channel: string
 
+  @Exclude()
   @Column({ type: 'varchar' })
   fk_guild_id: string
 
