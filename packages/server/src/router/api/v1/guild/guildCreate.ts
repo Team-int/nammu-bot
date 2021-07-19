@@ -34,6 +34,8 @@ const guildCreateRoute: FastifyPluginCallback = (fastify, opts, done) => {
 
     return guildEntity
   })
+
+  done()
 }
 
 export default guildCreateRoute

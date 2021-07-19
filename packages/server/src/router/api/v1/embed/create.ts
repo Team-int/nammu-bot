@@ -14,15 +14,14 @@ interface CreateEmbedQueryString {
 }
 
 const createEmbedRoute: FastifyPluginCallback = (fastify, opts, done) => {
-  fastify.register(guildChecker, {})
+  fastify.register(guildChecker, { throwErrorNonExists: true })
   fastify.post<{ Body: CreateEmbedBody; Querystring: CreateEmbedQueryString }>(
     '/',
     async (req, res) => {
       const { body, guild } = req
       const { embed_name: name, data = {} } = body
 
-      if (!guild) return res.status(404).send({ message: 'Guild not found' })
-      if (!guild.joined)
+      if (!guild?.joined)
         return res.status(403).send({ message: 'Bot is not joined the guild' })
 
       const exists = await getRepository(Embeds)

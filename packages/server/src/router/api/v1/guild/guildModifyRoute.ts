@@ -2,11 +2,9 @@ import guildChecker from '@src/middlewares/guildChecker'
 import { FastifyPluginCallback } from 'fastify'
 
 const guildModifyRoute: FastifyPluginCallback = (fastify, opts, done) => {
-  fastify.register(guildChecker)
+  fastify.register(guildChecker, { throwErrorNonExists: true })
   fastify.patch('/leave', async (req, res) => {
-    if (!req.guild) return res.status(404).send({ message: 'Guild not found' })
-
-    const guild = req.guild
+    const guild = req.guild!
 
     guild.joined = false
 
