@@ -29,6 +29,7 @@
     "@mgcrea/fastify-session": "^0.14.1",
     "@mgcrea/fastify-session-redis-store": "^0.9.1",
     "axios": "^0.21.1",
+    "class-transformer": "^0.4.0",
     "dotenv": "^10.0.0",
     "fastify": "^3.17.0",
     "fastify-compress": "^3.5.0",
