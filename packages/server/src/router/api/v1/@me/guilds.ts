@@ -3,10 +3,8 @@ import auth from '@src/middlewares/auth'
 import { FastifyPluginCallback } from 'fastify'
 
 const guildRoute: FastifyPluginCallback = (fastify, opts, done) => {
-  fastify.register(auth, {})
+  fastify.register(auth, { throwErrorNonExists: true })
   fastify.get('/', async (req, res) => {
-    if (!req.user) return res.status(401).send({ message: 'User not found' })
-
     const { user } = req
 
     const guilds = await Guild.find({ where: { owner: user } })

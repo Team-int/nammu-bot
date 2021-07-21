@@ -2,6 +2,7 @@ import { FastifyPluginCallback, RouteShorthandOptions } from 'fastify'
 import { URLSearchParams } from 'url'
 import { User } from '@src/entities/User'
 import daxios from '@src/lib/client/discord'
+import CustomError from '@src/lib/CustomError'
 
 interface ResponseType {
   access_token: string
@@ -51,8 +52,11 @@ const callbackRoute: FastifyPluginCallback = (fastify, opts, done) => {
           },
         })
       } catch (err) {
-        fastify.log.info(err.response.data)
-        return res.status(500)
+        throw new CustomError({
+          statusCode: 403,
+          name: 'ForbiddenError',
+          message: 'Something went wrong',
+        })
       }
 
       const user = await User.findOne(meResponse.data.id)

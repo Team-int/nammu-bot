@@ -16,7 +16,7 @@ const meRoute: FastifyPluginCallback = (fastify, opts, done) => {
       },
     })
 
-    return res.status(200).send({ data: response.data })
+    return res.send({ data: response.data })
   })
 
   done()
