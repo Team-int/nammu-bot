@@ -1,9 +1,13 @@
 import { Guild } from '@src/entities/Guild'
+import CustomError from '@src/lib/CustomError'
 import { FastifyPluginCallback } from 'fastify'
 import fp from 'fastify-plugin'
+import { MiddlewareDefaultOption } from '.'
 
-interface guildCheckerMiddlewareOption {
-  throwErrorNonExists?: boolean
+interface guildCheckerMiddlewareOption extends MiddlewareDefaultOption {}
+
+export interface guildCheckerMiddlewareHeaders {
+  guild_id: string
 }
 
 const guildCheckerMiddleware: FastifyPluginCallback<guildCheckerMiddlewareOption> =
@@ -13,13 +17,17 @@ const guildCheckerMiddleware: FastifyPluginCallback<guildCheckerMiddlewareOption
     fastify.addHook('preHandler', async (req, res) => {
       const id = req.headers['guild_id'] as string
 
-      if (throwErrorNonExists)
-        return res.status(404).send({ message: 'Guild not found' })
-
       const guild = await Guild.createQueryBuilder('guilds')
-        .where('id = :id', { id })
+        .where('guilds.id = :guildid', { guildid: id })
         .leftJoinAndSelect('guilds.metadata', 'metadata')
         .getOne()
+
+      if (throwErrorNonExists && !guild)
+        throw new CustomError({
+          statusCode: 404,
+          name: 'NotFoundError',
+          message: 'Guild not found',
+        })
 
       req.guild = guild
     })

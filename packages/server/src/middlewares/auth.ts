@@ -3,6 +3,8 @@ import fp from 'fastify-plugin'
 import { URLSearchParams } from 'url'
 import { User } from '@src/entities/User'
 import daxios from '@src/lib/client/discord'
+import CustomError from '@src/lib/CustomError'
+import { MiddlewareDefaultOption } from '.'
 
 interface ResponseType {
   access_token: string
@@ -12,7 +14,15 @@ interface ResponseType {
   token_type: 'Bearer'
 }
 
-const authMiddleware: FastifyPluginCallback = (fastify, opts, done) => {
+interface authCheckerMiddlewareOption extends MiddlewareDefaultOption {}
+
+const authMiddleware: FastifyPluginCallback<authCheckerMiddlewareOption> = (
+  fastify,
+  opts,
+  done
+) => {
+  const { throwErrorNonExists } = opts
+
   fastify.addHook('preHandler', async (req, res) => {
     const access_token = req.session.get('access_token')
     const refresh_token = req.session.get('refresh_token')
@@ -55,25 +65,39 @@ const authMiddleware: FastifyPluginCallback = (fastify, opts, done) => {
         req.session.set('refresh_token', data.refresh_token)
 
         req.session.set('access_token', data.access_token)
-      } catch (err) {
-        return
-      }
+      } catch (err) {}
     }
 
-    const response = await daxios.request('GET', {
-      url: '/users/@me',
-      options: {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    try {
+      const response = await daxios.request('GET', {
+        url: '/users/@me',
+        options: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      },
-    })
+      })
 
-    const data = response.data
+      const data = response.data
 
-    const user = await User.findOne(data.id)
+      const user = await User.findOne(data.id)
 
-    req.user = user
+      if (throwErrorNonExists && !user) {
+        throw new CustomError({
+          statusCode: 404,
+          name: 'NotFoundError',
+          message: 'User not found',
+        })
+      }
+
+      req.user = user
+    } catch (err) {
+      throw new CustomError({
+        statusCode: 403,
+        name: 'ForbiddenError',
+        message: 'Invalid token',
+      })
+    }
   })
 
   done()
