@@ -10,7 +10,7 @@ export default class EmbedService {
     if (!guild_id) return message.reply('DM에서 사용할 수 없는 명령어입니다')
     if (!embed_name) return message.reply('임베드의 이름을 지어주세요')
 
-    const waitMsg = await message.channel.send('잠시만요...')
+    message.channel.startTyping()
 
     try {
       await client.post(
@@ -25,7 +25,7 @@ export default class EmbedService {
         }
       )
 
-      await waitMsg.delete()
+      await message.channel.stopTyping()
 
       const successEmbed = EmbedGenerator.successEmbed({
         title: '성공',
@@ -34,7 +34,7 @@ export default class EmbedService {
 
       message.channel.send(successEmbed)
     } catch (err) {
-      await waitMsg.delete()
+      await message.channel.stopTyping()
 
       const response = (err as AxiosError).response
 
