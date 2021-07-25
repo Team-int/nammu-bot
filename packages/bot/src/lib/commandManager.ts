@@ -1,4 +1,4 @@
-import { Constructable, Message } from 'discord.js'
+import { Message } from 'discord.js'
 
 type ICommandAliases = string[] | string
 
@@ -14,6 +14,10 @@ export default function Command(command: ICommandAliases) {
       public command = command
     }
   }
+}
+
+export abstract class CommandController {
+  abstract init(message: Message, args: TArguments): unknown
 }
 
 export function Execute(

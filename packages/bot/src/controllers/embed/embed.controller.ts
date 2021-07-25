@@ -1,11 +1,13 @@
 import { autoInjectable } from 'tsyringe'
 import { Message } from 'discord.js'
 import EmbedService from './embed.service'
-import { TArguments } from '@src/lib/commandManager'
+import { CommandController, TArguments } from '@src/lib/commandManager'
 
 @autoInjectable()
-export default class EmbedController {
-  constructor(private readonly service?: EmbedService) {}
+export default class EmbedController extends CommandController {
+  constructor(private readonly service?: EmbedService) {
+    super()
+  }
 
   async init(message: Message, args: TArguments) {
     if (!args) return false
